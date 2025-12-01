@@ -1,0 +1,7 @@
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+
+[dev]
+  command = "npx netlify-cli dev"
+  port = 8888
