@@ -242,13 +242,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============ HELPER FUNCTIONS ============
     async function getSignedData(filename, filetype, quality) {
         try {
+            // attach Netlify Identity token when available so the function sees the user
+            let headers = { 'Content-Type': 'application/json' }
+            try {
+                const ni = window.netlifyIdentity && netlifyIdentity.currentUser && netlifyIdentity.currentUser()
+                const token = ni && ni.token && ni.token.access_token
+                if (token) headers['Authorization'] = 'Bearer ' + token
+            } catch (e) {
+                // ignore token retrieval errors
+            }
+
             const response = await fetch('/.netlify/functions/sign-upload', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers,
                 body: JSON.stringify({ filename, filetype, quality })
             })
 
-            if (!response.ok) throw new Error('Sign request failed')
+            if (!response.ok) {
+                const payload = await response.json().catch(() => null)
+                const msg = (payload && payload.error) ? payload.error : `Sign request failed (${response.status})`
+                throw new Error(msg)
+            }
+
             return await response.json()
         } catch (err) {
             console.error('Error getting signed data:', err)

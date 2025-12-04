@@ -85,14 +85,23 @@ document.addEventListener('DOMContentLoaded', function(){
     const body = { filename, filetype }
     if(public_id) body.public_id = public_id
     if(folder) body.folder = folder
+    // include Netlify Identity token if available so server sees the user
+    const headers = { 'Content-Type': 'application/json' }
+    try{
+      const ni = window.netlifyIdentity && netlifyIdentity.currentUser && netlifyIdentity.currentUser()
+      const token = ni && ni.token && ni.token.access_token
+      if(token) headers['Authorization'] = 'Bearer ' + token
+    }catch(e){}
+
     const res = await fetch('/.netlify/functions/sign-upload', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers,
       body: JSON.stringify(body)
     })
     if(!res.ok){
-      const txt = await res.text().catch(()=>null)
-      throw new Error('Cannot get signed data: '+(txt || res.status))
+      const payload = await res.json().catch(()=>null)
+      const msg = (payload && payload.error) ? payload.error : ('Cannot get signed data: '+res.status)
+      throw new Error(msg)
     }
     return await res.json()
   }
