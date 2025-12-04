@@ -33,51 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedFiles = []
     let currentMediaUrl = null
 
-    // ============ NETLIFY IDENTITY SETUP ============
-    if (window.netlifyIdentity) {
-        netlifyIdentity.init()
-
-        // ON LOGIN: Hide auth, show dashboard
-        netlifyIdentity.on('login', user => {
-            currentUser = user
-            userEmailEl.textContent = user.email || user.user_metadata?.name || 'Admin'
-            authWrap.style.display = 'none'
-            uploadWrap.style.display = 'block'
-            loadMediaLibrary()
-        })
-
-        // ON LOGOUT: Show auth, hide dashboard
-        netlifyIdentity.on('logout', () => {
-            currentUser = null
-            authWrap.style.display = 'flex'
-            uploadWrap.style.display = 'none'
-            selectedFiles = []
-            uploadForm.reset()
-        })
-
-        // Check if user already logged in
-        const user = netlifyIdentity.currentUser()
-        if (user) {
-            currentUser = user
-            userEmailEl.textContent = user.email || user.user_metadata?.name || 'Admin'
-            authWrap.style.display = 'none'
-            uploadWrap.style.display = 'block'
-            loadMediaLibrary()
-        }
-    }
-
-    // Login/Logout buttons
-    loginBtn.onclick = () => {
-        if (window.netlifyIdentity) {
-            netlifyIdentity.open()
-        }
-    }
-
-    logoutBtn.onclick = () => {
-        if (window.netlifyIdentity) {
-            netlifyIdentity.logout()
-        }
-    }
+    // Cloudflare-only: Show dashboard by default (no login)
+    authWrap.style.display = 'none';
+    uploadWrap.style.display = 'block';
+    userEmailEl.textContent = 'Admin';
+    // Login/Logout buttons do nothing
+    loginBtn.onclick = () => {};
+    logoutBtn.onclick = () => {};
 
     // ============ DROP ZONE & FILE SELECTION ============
     dropZone.addEventListener('click', () => qualitiesInput.click())
@@ -241,33 +203,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ============ HELPER FUNCTIONS ============
     async function getSignedData(filename, filetype, quality) {
+        // Cloudflare Worker endpoint only
+        const SIGN_ENDPOINT = window.SIGN_ENDPOINT;
+        const ADMIN_SECRET = window.ADMIN_SECRET || null;
         try {
-            // attach Netlify Identity token when available so the function sees the user
-            let headers = { 'Content-Type': 'application/json' }
-            try {
-                const ni = window.netlifyIdentity && netlifyIdentity.currentUser && netlifyIdentity.currentUser()
-                const token = ni && ni.token && ni.token.access_token
-                if (token) headers['Authorization'] = 'Bearer ' + token
-            } catch (e) {
-                // ignore token retrieval errors
-            }
-
-            const response = await fetch('/.netlify/functions/sign-upload', {
+            let headers = { 'Content-Type': 'application/json' };
+            if (ADMIN_SECRET) headers['x-admin-secret'] = ADMIN_SECRET;
+            const response = await fetch(SIGN_ENDPOINT, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify({ filename, filetype, quality })
-            })
-
+            });
             if (!response.ok) {
-                const payload = await response.json().catch(() => null)
-                const msg = (payload && payload.error) ? payload.error : `Sign request failed (${response.status})`
-                throw new Error(msg)
+                const payload = await response.json().catch(() => null);
+                const msg = (payload && payload.error) ? payload.error : `Sign request failed (${response.status})`;
+                throw new Error(msg);
             }
-
-            return await response.json()
+            return await response.json();
         } catch (err) {
-            console.error('Error getting signed data:', err)
-            return null
+            console.error('Error getting signed data:', err);
+            return null;
         }
     }
 

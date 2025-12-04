@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -705,12 +705,12 @@
     <!-- LOGIN SECTION -->
     <div id="authWrap">
         <div class="login-card">
-            <h1>🎵 Flavournous Voice</h1>
+            <h1>ðŸŽµ Flavournous Voice</h1>
             <p>Admin Dashboard</p>
             <p style="font-size: 0.9em; color: #999; margin: 20px 0;">Sign in to manage media uploads and library</p>
-            <button class="login-btn" id="loginBtn">Sign In with Netlify Identity</button>
+            <button class="login-btn" id="loginBtn">Admin Access</button>
             <p style="margin-top: 20px; font-size: 0.85em; color: #bbb;">
-                💡 Tip: Contact administrator for access credentials
+                ðŸ’¡ Tip: Contact administrator for access credentials
             </p>
         </div>
     </div>
@@ -720,7 +720,7 @@
         <div class="container">
             <!-- Header with User Info -->
             <div class="dashboard-header">
-                <h1>📊 Admin Dashboard</h1>
+                <h1>ðŸ“Š Admin Dashboard</h1>
                 <div class="user-info">
                     <div>
                         <div class="user-email" id="userEmail">Loading...</div>
@@ -734,7 +734,7 @@
             <div class="dashboard-content">
                 <!-- Upload Section -->
                 <div class="card">
-                    <h2>📤 Upload Media</h2>
+                    <h2>ðŸ“¤ Upload Media</h2>
 
                     <form id="uploadForm">
                         <!-- Metadata -->
@@ -787,7 +787,7 @@
                         <div class="form-group">
                             <label>Audio/Video Files *</label>
                             <div id="dropZone">
-                                <div class="drop-icon">📁</div>
+                                <div class="drop-icon">ðŸ“</div>
                                 <p><strong>Drag & drop files here</strong></p>
                                 <p>or click to select</p>
                                 <small>Supported: MP3, M4A, MP4, WebM, OGG</small>
@@ -801,7 +801,7 @@
                         <!-- Action Buttons -->
                         <div class="btn-group">
                             <button type="submit" class="btn btn-primary" id="uploadBtn">
-                                🚀 Upload Files
+                                ðŸš€ Upload Files
                             </button>
                             <button type="reset" class="btn btn-secondary">Clear Form</button>
                         </div>
@@ -814,7 +814,7 @@
 
                 <!-- Quick Actions & Info -->
                 <div class="card">
-                    <h2>⚙️ Quick Actions</h2>
+                    <h2>âš™ï¸ Quick Actions</h2>
 
                     <div style="margin-bottom: 20px;">
                         <h3 style="color: var(--secondary); margin-bottom: 10px;">Upload Instructions</h3>
@@ -833,29 +833,29 @@
 
                     <h3 style="color: var(--secondary); margin-bottom: 10px; margin-top: 20px;">Features</h3>
                     <ul style="padding-left: 20px; color: rgba(255,255,255,0.8); line-height: 1.8; font-size: 0.9em;">
-                        <li>✅ Multi-quality uploads (320k, 192k, 128k)</li>
-                        <li>✅ Video support with automatic transcoding</li>
-                        <li>✅ Drag & drop interface</li>
-                        <li>✅ Real-time upload progress tracking</li>
-                        <li>✅ Automatic cover image handling</li>
-                        <li>✅ Secure Cloudinary signed uploads</li>
-                        <li>✅ Media library browsing & playback</li>
+                        <li>âœ… Multi-quality uploads (320k, 192k, 128k)</li>
+                        <li>âœ… Video support with automatic transcoding</li>
+                        <li>âœ… Drag & drop interface</li>
+                        <li>âœ… Real-time upload progress tracking</li>
+                        <li>âœ… Automatic cover image handling</li>
+                        <li>âœ… Secure Cloudinary signed uploads</li>
+                        <li>âœ… Media library browsing & playback</li>
                     </ul>
 
                     <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
 
                     <h3 style="color: var(--secondary); margin-bottom: 10px; margin-top: 20px;">Supported Formats</h3>
                     <ul style="padding-left: 20px; color: rgba(255,255,255,0.8); line-height: 1.8; font-size: 0.9em;">
-                        <li>🎵 Audio: MP3, M4A, OGG, WebM</li>
-                        <li>🎬 Video: MP4, WebM, MOV, AVI</li>
-                        <li>🖼️ Cover: JPG, PNG, WebP</li>
+                        <li>ðŸŽµ Audio: MP3, M4A, OGG, WebM</li>
+                        <li>ðŸŽ¬ Video: MP4, WebM, MOV, AVI</li>
+                        <li>ðŸ–¼ï¸ Cover: JPG, PNG, WebP</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Media Library Section -->
             <div class="media-library">
-                <h2>📚 Media Library</h2>
+                <h2>ðŸ“š Media Library</h2>
                 <div id="mediaList" class="media-grid">
                     <p style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.6); padding: 40px 20px;">
                         <span class="spinner"></span> Loading media library...
@@ -876,16 +876,19 @@
                 <video id="videoPlayer" controls style="display:none;"></video>
             </div>
             <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" id="downloadFromPlayer">
-                ⬇️ Download File
+                â¬‡ï¸ Download File
             </button>
         </div>
     </div>
 
-    <!-- Netlify Identity Widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+        <!-- Configure Cloudflare Worker Endpoint -->
+        <script>
+            window.SIGN_ENDPOINT = "https://flavournous-sign-upload-production.shadrackechesa40.workers.dev";
+        </script>
 
     <!-- Main Dashboard Script -->
     <script src="admin-dashboard.js" defer></script>
 
 </body>
 </html>
+

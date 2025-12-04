@@ -1,4 +1,4 @@
-// site/admin-signed-full.js
+﻿// site/admin-signed-full.js
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -16,26 +16,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   let currentUser = null
 
-  // Initialize Netlify Identity
-  if(window.netlifyIdentity){
-    netlifyIdentity.init()
-    netlifyIdentity.on('login', user=>{
-      currentUser = user
-      authWrap.style.display='none'
-      uploadWrap.style.display='block'
-    })
-    netlifyIdentity.on('logout', ()=>{
-      currentUser = null
-      authWrap.style.display='block'
-      uploadWrap.style.display='none'
-    })
-  }
-
-  loginBtn.onclick = ()=> netlifyIdentity.open()
-
-  logoutBtn.onclick = ()=>{
-    netlifyIdentity.logout()
-  }
+  // Cloudflare-only: No login/logout, always show dashboard
+  authWrap.style.display='none';
+  uploadWrap.style.display='block';
+  window.SIGN_ENDPOINT = "https://flavournous-sign-upload-production.shadrackechesa40.workers.dev";
+  window.ADMIN_SECRET = "dev-admin-secret-flavournous";
+  loginBtn.onclick = ()=>{};
+  logoutBtn.onclick = ()=>{};
 
   // Drag & drop files to qualities input
   dropZone.addEventListener('dragover', e=>{
@@ -82,18 +69,14 @@ document.addEventListener('DOMContentLoaded', function(){
   coverInput.addEventListener('change', renderThumbs)
 
   async function getSignedData(filename, filetype, public_id, folder){
-    const body = { filename, filetype }
-    if(public_id) body.public_id = public_id
-    if(folder) body.folder = folder
-    // include Netlify Identity token if available so server sees the user
-    const headers = { 'Content-Type': 'application/json' }
-    try{
-      const ni = window.netlifyIdentity && netlifyIdentity.currentUser && netlifyIdentity.currentUser()
-      const token = ni && ni.token && ni.token.access_token
-      if(token) headers['Authorization'] = 'Bearer ' + token
-    }catch(e){}
-
-    const res = await fetch('/.netlify/functions/sign-upload', {
+    const SIGN_ENDPOINT = window.SIGN_ENDPOINT;
+    const ADMIN_SECRET = window.ADMIN_SECRET || null;
+    const body = { filename, filetype };
+    if(public_id) body.public_id = public_id;
+    if(folder) body.folder = folder;
+    const headers = { 'Content-Type': 'application/json' };
+    if(ADMIN_SECRET) headers['x-admin-secret'] = ADMIN_SECRET;
+    const res = await fetch(SIGN_ENDPOINT, {
       method:'POST',
       headers,
       body: JSON.stringify(body)

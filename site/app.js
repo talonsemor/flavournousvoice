@@ -1,5 +1,8 @@
 ﻿async function fetchMedia(){
-  const res = await fetch('/.netlify/functions/media')
+  // Cloudflare Worker endpoint for media listing (implement if needed)
+  // const res = await fetch('https://YOUR_WORKER_URL/media')
+  // For now, return empty array or implement as needed
+  const res = { ok: false, json: async () => [] }
   if(!res.ok) return []
   return await res.json()
 }
