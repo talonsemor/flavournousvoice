@@ -81,17 +81,23 @@ document.addEventListener('DOMContentLoaded', function(){
   qualitiesInput.addEventListener('change', renderThumbs)
   coverInput.addEventListener('change', renderThumbs)
 
-  async function getSignedData(filename, filetype){
+  async function getSignedData(filename, filetype, public_id, folder){
+    const body = { filename, filetype }
+    if(public_id) body.public_id = public_id
+    if(folder) body.folder = folder
     const res = await fetch('/.netlify/functions/sign-upload', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({filename,filetype})
+      body: JSON.stringify(body)
     })
-    if(!res.ok) throw new Error('Cannot get signed data')
+    if(!res.ok){
+      const txt = await res.text().catch(()=>null)
+      throw new Error('Cannot get signed data: '+(txt || res.status))
+    }
     return await res.json()
   }
 
-  async function uploadFile(file, signed, eager=''){
+  async function uploadFile(file, signed, eager='', context=''){
     return new Promise((resolve,reject)=>{
       const url = `https://api.cloudinary.com/v1_1/${signed.cloud_name}/${file.type.startsWith('image/')?'image':'video'}/upload`
       const fd = new FormData()
@@ -101,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function(){
       fd.append('signature', signed.signature)
       fd.append('folder', signed.folder)
       if(signed.public_id) fd.append('public_id', signed.public_id)
+      if(context) fd.append('context', context)
       if(eager) fd.append('eager', eager)
       const xhr = new XMLHttpRequest()
       xhr.open('POST', url)
@@ -133,20 +140,34 @@ document.addEventListener('DOMContentLoaded', function(){
       return
     }
     try{
-      // Upload cover first
+      // Build a safe base public_id from artist/title
+      function safe(s){
+        return String(s||'').toLowerCase().replace(/[^a-z0-9-_]+/g,'-').replace(/^-+|-+$/g,'').slice(0,120)
+      }
+      const baseId = safe((artist?artist+'-':'') + (title||'untitled'))
+      const folder = 'flavournous'
+
+      // Upload cover first (if present)
       let coverData = null
       if(coverInput.files.length){
         const c = coverInput.files[0]
-        const signedCover = await getSignedData(c.name,c.type)
-        coverData = await uploadFile(c,signedCover)
+        const public_id = baseId + '-cover'
+        const signedCover = await getSignedData(c.name,c.type, public_id, folder)
+        // include context with title/artist/type
+        const ctx = `title=${encodeURIComponent(title)}|artist=${encodeURIComponent(artist)}|type=cover`
+        coverData = await uploadFile(c,signedCover,'',ctx)
       }
 
-      // Upload all qualities
+      // Upload all quality files
       const uploaded = []
       for(const f of qualitiesInput.files){
-        const signed = await getSignedData(f.name,f.type)
+        const basename = f.name.replace(/\.[^.]+$/, '')
+        const qualityLabel = basename
+        const public_id = baseId + '-' + safe(qualityLabel)
+        const signed = await getSignedData(f.name,f.type, public_id, folder)
         const eagerTransform = f.type.startsWith('video/') ? "w_320,h_180,c_fill,so_0" : ""
-        const data = await uploadFile(f,signed,eagerTransform)
+        const ctx = `title=${encodeURIComponent(title)}|artist=${encodeURIComponent(artist)}|quality=${encodeURIComponent(qualityLabel)}`
+        const data = await uploadFile(f,signed,eagerTransform,ctx)
         uploaded.push(data)
       }
 

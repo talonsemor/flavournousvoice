@@ -50,12 +50,12 @@ exports.handler = async function(event, context){
     return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: 'File too large', max: MAX_BYTES }) }
   }
 
-  // Build signature string including folder/public_id/timestamp (only keys included here are signed)
-  const params = []
-  if(folder) params.push('folder=' + folder)
-  if(public_id) params.push('public_id=' + public_id)
-  params.push('timestamp=' + timestamp)
-  const toSign = params.join('&') + API_SECRET
+  // Build signature string including folder/public_id/timestamp (only keys included here are signed). Sort keys per Cloudinary requirements.
+  const paramsObj = {}
+  if(folder) paramsObj.folder = folder
+  if(public_id) paramsObj.public_id = public_id
+  paramsObj.timestamp = timestamp
+  const toSign = Object.keys(paramsObj).sort().map(k=>k+'='+paramsObj[k]).join('&') + API_SECRET
   const signature = crypto.createHash('sha1').update(toSign).digest('hex')
 
   return {
