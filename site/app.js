@@ -1,4 +1,4 @@
-async function fetchMedia(){
+﻿async function fetchMedia(){
   const res = await fetch('/.netlify/functions/media')
   if(!res.ok) return []
   return await res.json()
@@ -99,9 +99,9 @@ async function loadAlbum(artist){
   })
 }
 function thumbnailFor(item){
-  if(!item || !item.public_id) return (item && item.image) || '/public/uploads/placeholder.png'
+  if(!item || !item.public_id) return (item && item.image) || 'placeholder.png'
   const cloud = item.cloud_name || window.CLOUDINARY_CLOUD_NAME || ''
-  if(!cloud) return (item && item.image) || '/public/uploads/placeholder.png'
+  if(!cloud) return (item && item.image) || 'placeholder.png'
   return `https://res.cloudinary.com/${cloud}/image/upload/w_400,h_300,c_fill/${item.public_id}.${item.format}`
 }
 function openPlayer(item){
@@ -137,7 +137,7 @@ function openPlayer(item){
   playBtn.onclick = ()=>{
     if(!mediaEl){
       const src = selector.value
-      if(src.match(/\\.(mp4|webm|ogg)$/i)){
+      if(src.match(/\.(mp4|webm|ogg)$/i)){
         mediaEl = document.createElement('video')
         mediaEl.controls = true
         mediaEl.width = 320
@@ -177,3 +177,4 @@ function openPlayer(item){
   wrap.appendChild(info)
   wrap.appendChild(closeBtn)
 }
+

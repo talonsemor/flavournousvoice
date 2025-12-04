@@ -17,7 +17,7 @@
         </div>
       </div>
       <nav>
-        <a href="/" class="admin-link">Back</a>
+        <a href="index.html" class="admin-link">Back</a>
       </nav>
     </header>
 
@@ -66,6 +66,24 @@
   </div>
 
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script src="admin-signed-full.js"></script>
+<script>
+  (async function(){
+    try{
+      const res = await fetch('/.netlify/identity')
+      if(!res.ok) throw new Error('Identity endpoint returned ' + res.status)
+    }catch(err){
+      const authWrap = document.getElementById('authWrap')
+      if(authWrap){
+        const warn = document.createElement('div')
+        warn.style.color = 'var(--danger, #c00)'
+        warn.style.marginTop = '8px'
+        warn.textContent = 'Netlify Identity appears unavailable. Ensure Identity is enabled in your Netlify site and that you are running via `netlify dev` or a deployed Netlify site.'
+        authWrap.appendChild(warn)
+      }
+      console.error('Netlify Identity availability check failed', err)
+    }
+  })()
+</script>
+<script src="admin-signed-full.js" defer></script>
 </body>
 </html>
