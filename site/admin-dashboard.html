@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -892,3 +893,899 @@
 </body>
 </html>
 
+=======
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Flavournous Voice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8e44ad;
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --dark: #1a1a1a;
+            --light: #ecf0f1;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ============ LOGIN SECTION ============ */
+        #authWrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-card h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .login-card p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ============ DASHBOARD SECTION ============ */
+        #uploadWrap {
+            display: none;
+            min-height: 100vh;
+            background: var(--dark);
+            color: white;
+            padding: 20px 0;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2em;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-email {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dashboard-header h1 {
+                width: 100%;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ============ UPLOAD SECTION ============ */
+        .card {
+            background: linear-gradient(135deg, #1e1e2e 0%, #282c34 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(142, 68, 173, 0.3);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light);
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Drop Zone */
+        #dropZone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(142, 68, 173, 0.05);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #dropZone:hover {
+            border-color: var(--primary);
+            background: rgba(142, 68, 173, 0.1);
+        }
+
+        #dropZone.dragover {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.15);
+        }
+
+        .drop-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        #dropZone p {
+            color: var(--light);
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        #dropZone small {
+            color: rgba(255, 255, 255, 0.6);
+            display: block;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+
+        /* Thumbnails */
+        #thumbs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .thumb-item {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumb-item img,
+        .thumb-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumb-item .filename {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px;
+            font-size: 0.7em;
+            color: white;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .thumb-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8em;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .thumb-item:hover .remove-btn {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(142, 68, 173, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Progress */
+        #progressList {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .progress-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .progress-filename {
+            color: var(--light);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+
+        .progress-error {
+            color: var(--danger);
+        }
+
+        .progress-success {
+            color: var(--success);
+        }
+
+        /* Status */
+        #uploadStatus {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        #uploadStatus.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+
+        #uploadStatus.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        /* Media Library Section */
+        .media-library {
+            margin-top: 30px;
+        }
+
+        .media-library h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .media-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .media-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(142, 68, 173, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .media-thumbnail {
+            width: 100%;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 3em;
+            overflow: hidden;
+        }
+
+        .media-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-info {
+            padding: 12px;
+        }
+
+        .media-title {
+            color: var(--light);
+            font-weight: 600;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .media-meta {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .media-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .media-btn-play {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .media-btn-play:hover {
+            background: #2980b9;
+        }
+
+        .media-btn-download {
+            background: var(--success);
+            color: white;
+        }
+
+        .media-btn-download:hover {
+            background: #27ae60;
+        }
+
+        .media-btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .media-btn-delete:hover {
+            background: #c0392b;
+        }
+
+        /* Modal for playback */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #c0392b;
+        }
+
+        .player-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .player-container audio,
+        .player-container video {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 20px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: auto;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            #dropZone {
+                padding: 20px;
+                min-height: 100px;
+            }
+
+            .drop-icon {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 25px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5em;
+            }
+
+            .card h2 {
+                font-size: 1.2em;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #thumbs {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SECTION -->
+    <div id="authWrap">
+        <div class="login-card">
+            <h1>ðŸŽµ Flavournous Voice</h1>
+            <p>Admin Dashboard</p>
+            <p style="font-size: 0.9em; color: #999; margin: 20px 0;">Sign in to manage media uploads and library</p>
+            <button class="login-btn" id="loginBtn">Admin Access</button>
+            <p style="margin-top: 20px; font-size: 0.85em; color: #bbb;">
+                ðŸ’¡ Tip: Contact administrator for access credentials
+            </p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="uploadWrap">
+        <div class="container">
+            <!-- Header with User Info -->
+            <div class="dashboard-header">
+                <h1>ðŸ“Š Admin Dashboard</h1>
+                <div class="user-info">
+                    <div>
+                        <div class="user-email" id="userEmail">Loading...</div>
+                        <small style="color: rgba(255,255,255,0.7);">Logged in</small>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="dashboard-content">
+                <!-- Upload Section -->
+                <div class="card">
+                    <h2>ðŸ“¤ Upload Media</h2>
+
+                    <form id="uploadForm">
+                        <!-- Metadata -->
+                        <div class="form-group">
+                            <label for="titleInput">Title *</label>
+                            <input type="text" id="titleInput" placeholder="e.g., Song Title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="artistInput">Artist *</label>
+                            <input type="text" id="artistInput" placeholder="e.g., Artist Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="albumInput">Album (Optional)</label>
+                            <input type="text" id="albumInput" placeholder="e.g., Album Name">
+                        </div>
+
+                        <!-- Cover Image -->
+                        <div class="form-group">
+                            <label for="coverInput">Cover Image *</label>
+                            <input type="file" id="coverInput" accept="image/*" required>
+                            <small style="color: rgba(255,255,255,0.6);">Recommended: PNG/JPG, 500x500px</small>
+                        </div>
+
+                        <!-- Quality Selection -->
+                        <div class="form-group">
+                            <label>Upload Qualities *</label>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <label style="display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                                    <input type="checkbox" class="quality-check" value="320kbps" checked>
+                                    320 kbps
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                                    <input type="checkbox" class="quality-check" value="192kbps">
+                                    192 kbps
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                                    <input type="checkbox" class="quality-check" value="128kbps">
+                                    128 kbps
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                                    <input type="checkbox" class="quality-check" value="video">
+                                    Video (MP4)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Drop Zone -->
+                        <div class="form-group">
+                            <label>Audio/Video Files *</label>
+                            <div id="dropZone">
+                                <div class="drop-icon">ðŸ“</div>
+                                <p><strong>Drag & drop files here</strong></p>
+                                <p>or click to select</p>
+                                <small>Supported: MP3, M4A, MP4, WebM, OGG</small>
+                            </div>
+                            <div id="thumbs"></div>
+                        </div>
+
+                        <!-- File input (hidden) -->
+                        <input type="file" id="qualitiesInput" multiple accept="audio/*,video/*" style="display:none;">
+
+                        <!-- Action Buttons -->
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="uploadBtn">
+                                ðŸš€ Upload Files
+                            </button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+
+                    <!-- Upload Progress -->
+                    <div id="progressList"></div>
+                    <div id="uploadStatus"></div>
+                </div>
+
+                <!-- Quick Actions & Info -->
+                <div class="card">
+                    <h2>âš™ï¸ Quick Actions</h2>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: var(--secondary); margin-bottom: 10px;">Upload Instructions</h3>
+                        <ol style="padding-left: 20px; color: rgba(255,255,255,0.8); line-height: 1.8; font-size: 0.9em;">
+                            <li>Fill in the Title and Artist fields</li>
+                            <li>Select a cover image (JPG/PNG)</li>
+                            <li>Choose upload qualities (320kbps, 192kbps, etc.)</li>
+                            <li>Drag audio/video files to the drop zone</li>
+                            <li>Review thumbnails below drop zone</li>
+                            <li>Click "Upload Files" to start</li>
+                            <li>Monitor progress in real-time</li>
+                        </ol>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+                    <h3 style="color: var(--secondary); margin-bottom: 10px; margin-top: 20px;">Features</h3>
+                    <ul style="padding-left: 20px; color: rgba(255,255,255,0.8); line-height: 1.8; font-size: 0.9em;">
+                        <li>âœ… Multi-quality uploads (320k, 192k, 128k)</li>
+                        <li>âœ… Video support with automatic transcoding</li>
+                        <li>âœ… Drag & drop interface</li>
+                        <li>âœ… Real-time upload progress tracking</li>
+                        <li>âœ… Automatic cover image handling</li>
+                        <li>âœ… Secure Cloudinary signed uploads</li>
+                        <li>âœ… Media library browsing & playback</li>
+                    </ul>
+
+                    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+                    <h3 style="color: var(--secondary); margin-bottom: 10px; margin-top: 20px;">Supported Formats</h3>
+                    <ul style="padding-left: 20px; color: rgba(255,255,255,0.8); line-height: 1.8; font-size: 0.9em;">
+                        <li>ðŸŽµ Audio: MP3, M4A, OGG, WebM</li>
+                        <li>ðŸŽ¬ Video: MP4, WebM, MOV, AVI</li>
+                        <li>ðŸ–¼ï¸ Cover: JPG, PNG, WebP</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Media Library Section -->
+            <div class="media-library">
+                <h2>ðŸ“š Media Library</h2>
+                <div id="mediaList" class="media-grid">
+                    <p style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.6); padding: 40px 20px;">
+                        <span class="spinner"></span> Loading media library...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Modal -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 style="color: var(--primary); margin-bottom: 15px;" id="playerTitle">Playing...</h2>
+            <div id="playerMetadata" style="color: rgba(255,255,255,0.7); margin-bottom: 15px; font-size: 0.9em;"></div>
+            <div class="player-container">
+                <audio id="audioPlayer" controls style="display:none;"></audio>
+                <video id="videoPlayer" controls style="display:none;"></video>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" id="downloadFromPlayer">
+                â¬‡ï¸ Download File
+            </button>
+        </div>
+    </div>
+
+        <!-- Configure Cloudflare Worker Endpoint -->
+        <script>
+            window.SIGN_ENDPOINT = "https://flavournous-sign-upload-production.shadrackechesa40.workers.dev";
+        </script>
+
+    <!-- Main Dashboard Script -->
+    <script src="admin-dashboard.js" defer></script>
+
+</body>
+</html>
+
+>>>>>>> 8ddd30324b0764b0ea96f5a39a3dd53f48394074

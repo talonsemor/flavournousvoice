@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Flavournous Dance</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">FD</div>
+        <div class="titles">
+          <h1>Admin Upload</h1>
+          <p class="muted">Upload audio/video files and cover images</p>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" class="admin-link">Back</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="card" style="max-width:980px;margin:0 auto">
+        <div id="authWrap">
+          <p>Sign in with Netlify Identity to manage uploads.</p>
+          <button id="loginBtn" class="btn">Open Sign-in</button>
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">
+            <strong>Note:</strong> Enable Netlify Identity in your Netlify site and invite users.
+          </div>
+        </div>
+
+        <div id="uploadWrap" style="display:none;margin-top:12px">
+          <h3>Upload Media</h3>
+          <form id="uploadForm">
+            <input name="title" placeholder="Title" required />
+            <input name="artist" placeholder="Artist" />
+
+            <label>Cover image (optional)</label>
+            <input type="file" id="coverInput" name="cover" accept="image/*" />
+
+            <label>Quality files (upload one or more; filename used as label)</label>
+            <input type="file" id="qualitiesInput" name="qualities" accept="audio/*,video/*" multiple />
+
+            <div id="dropZone" class="card" style="margin-top:12px;padding:12px;border:2px dashed rgba(255,255,255,0.03)">
+              Drag & drop files here (also supports selecting above). <div class="muted" style="font-size:12px">Files dropped will be added to the quality files list.</div>
+            </div>
+
+            <div id="thumbs" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"></div>
+
+            <div style="margin-top:12px">
+              <button class="btn" type="submit">Upload (signed + eager)</button>
+              <button id="logoutBtn" class="btn small" type="button">Logout</button>
+              <span id="uploadStatus" class="muted"></span>
+            </div>
+
+            <div id="progressList" style="margin-top:12px"></div>
+          </form>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="footer">Admin — Flavournous Dance</footer>
+  </div>
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  (async function(){
+    try{
+      const res = await fetch('/.netlify/identity')
+      if(!res.ok) throw new Error('Identity endpoint returned ' + res.status)
+    }catch(err){
+      const authWrap = document.getElementById('authWrap')
+      if(authWrap){
+        const warn = document.createElement('div')
+        warn.style.color = 'var(--danger, #c00)'
+        warn.style.marginTop = '8px'
+        warn.textContent = 'Netlify Identity appears unavailable. Ensure Identity is enabled in your Netlify site and that you are running via `netlify dev` or a deployed Netlify site.'
+        authWrap.appendChild(warn)
+      }
+      console.error('Netlify Identity availability check failed', err)
+    }
+  })()
+</script>
+<script src="admin-signed-full.js" defer></script>
+</body>
+</html>

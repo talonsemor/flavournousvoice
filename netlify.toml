@@ -1,0 +1,9 @@
+[build]
+  base = "."
+  publish = "site"
+  command = "echo 'No build needed for static site'"
+  functions = "netlify/functions"
+
+[dev]
+  command = "npx netlify-cli dev"
+  port = 8888

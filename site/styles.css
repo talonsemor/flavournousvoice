@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* site/styles.css */
 body{margin:0;font-family:sans-serif;background:#121212;color:#fff}
 .app{display:flex;flex-direction:column;min-height:100vh}
@@ -22,4 +23,30 @@ nav{display:flex;gap:20px}
 .btn.secondary:hover{background:#444}
 .player{position:fixed;bottom:12px;right:12px;background:#222;padding:12px;border-radius:8px;display:flex;gap:12px;align-items:center;border:1px solid #00d4ff}
 .hidden{display:none}
+=======
+/* site/styles.css */
+body{margin:0;font-family:sans-serif;background:#121212;color:#fff}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:20px;background:#1e1e1e;border-bottom:1px solid #333}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{font-weight:bold;font-size:28px;color:#00d4ff}
+.titles h1{margin:0;font-size:20px;color:#fff}
+.muted{color:#aaa;font-size:12px}
+nav{display:flex;gap:20px}
+.admin-link{color:#00d4ff;text-decoration:none;font-weight:600;font-size:14px;padding:8px 16px;border:2px solid #00d4ff;border-radius:4px;transition:all 0.3s}
+.admin-link:hover{background:#00d4ff;color:#121212;cursor:pointer}
+.container{flex:1;padding:20px}
+.card{background:#1a1a1a;padding:16px;border-radius:8px;margin-bottom:20px;border:1px solid #333}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:16px}
+.item.card{text-align:center;padding:12px;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;border:1px solid #333}
+.item.card:hover{transform:translateY(-4px);box-shadow:0 4px 12px rgba(0,212,255,0.2)}
+.thumb{width:100%;height:120px;object-fit:cover;background:#333;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:4px;margin-bottom:8px;font-size:14px;font-weight:600}
+.btn{padding:8px 14px;background:#00d4ff;color:#121212;border:none;border-radius:4px;cursor:pointer;margin:4px;font-weight:600;transition:background 0.2s}
+.btn:hover{background:#00b8d4}
+.btn.small{padding:4px 10px;font-size:12px}
+.btn.secondary{background:#333;color:#fff}
+.btn.secondary:hover{background:#444}
+.player{position:fixed;bottom:12px;right:12px;background:#222;padding:12px;border-radius:8px;display:flex;gap:12px;align-items:center;border:1px solid #00d4ff}
+.hidden{display:none}
+>>>>>>> 8ddd30324b0764b0ea96f5a39a3dd53f48394074
 .footer{text-align:center;padding:12px;background:#1e1e1e;border-top:1px solid #333;margin-top:auto}

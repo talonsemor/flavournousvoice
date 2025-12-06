@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "flavournous-cloudflare-cloudinary-signed-full",
   "version": "1.0.0",
@@ -5,4 +6,13 @@
   "dependencies": {
     "node-fetch": "2.6.7"
   }
+=======
+{
+  "name": "flavournous-cloudflare-cloudinary-signed-full",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "2.6.7"
+  }
+>>>>>>> 8ddd30324b0764b0ea96f5a39a3dd53f48394074
 }
