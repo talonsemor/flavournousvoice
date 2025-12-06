@@ -1,0 +1,30 @@
+# cloudflare/wrangler.toml (example)
+name = "flavournous-sign-upload"
+main = "./sign-upload-worker.js"
+compatibility_date = "2025-12-04"
+
+# Set this to your account id when deploying
+# account_id = "YOUR_ACCOUNT_ID"
+
+[env.production]
+# add bindings in production via `wrangler secret put` or in the Cloudflare dashboard
+# Cloudinary config
+# CLOUDINARY_CLOUD_NAME = "your_cloud_name"
+# CLOUDINARY_API_KEY = "your_api_key"
+# CLOUDINARY_API_SECRET = "your_api_secret"
+# Auth
+# ADMIN_SECRET = "a_dev_secret_for_local_testing"
+# LLM Model (Claude Haiku 4.5 recommended)
+# DEFAULT_LLM_MODEL = "claude-haiku-4.5"
+
+# To deploy (quick steps):
+# 1. Install Wrangler: `npm install -g wrangler` or `npm install --save-dev wrangler`
+# 2. Authenticate: `wrangler login` or `wrangler whoami`
+# 3. Set secrets: `wrangler secret put CLOUDINARY_API_KEY` etc.
+# 4. Publish: `wrangler publish --env production`
+
+# KV namespace for storing media list. Create a namespace via `wrangler kv:namespace create "media_store" --binding MEDIA_STORE`
+[kv_namespaces]
+bindings = [
+	{ binding = "MEDIA_STORE", id = "__MEDIA_STORE_KV_ID__" }
+]

@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+.netlify/
+.DS_Store
+*.log
+dist/
+build/
+.cache/
+.parcel-cache/
+package-lock.json
