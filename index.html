@@ -1,73 +1,45 @@
-<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flavournous Dance — Music & Video</title>
-  <link rel="stylesheet" href="site/styles.css" />
-</head>
-<body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">FD</div>
-        <div class="titles">
-          <h1>Flavournous Voice </h1>
-          <p class="muted">Play online • Download • Dance</p>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Flavournous Dance — Music & Video</title>
+    <link rel="stylesheet" href="site/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo">FV</div>
+          <div class="titles">
+            <h1>Flavournous Voice</h1>
+            <p class="muted">Play online • Download • Dance</p>
+          </div>
         </div>
-      </div>
-      <nav>
-        <a href="site/admin-dashboard.html" class="admin-link">Admin Dashboard</a>
-      </nav>
-    </header>
+        <nav>
+          <a href="site/admin-dashboard.html" class="admin-link"
+            >Admin Dashboard</a
+          >
+          <button id="themeToggle" class="btn small" style="margin-left: 12px">
+            Toggle Theme
+          </button>
+        </nav>
+      </header>
 
-    <main class="container" id="main">
-      <!-- injected by router -->
-    </main>
+      <main class="container" id="main">
+        <!-- Media grid -->
+        <div id="grid" class="grid"></div>
+      </main>
 
-    <div id="player" class="player hidden card"></div>
+      <div id="player" class="player hidden card"></div>
 
-    <footer class="footer">© Flavournous Dance</footer>
-  </div>
+      <footer class="footer">© Flavournous Dance</footer>
+    </div>
 
-<script src="site/app.js" defer></script>
-</body>
+    <script>
+      // Ensure site scripts load relative to root
+      window.SITE_BASE = "site";
+    </script>
+    <script src="site/app.js" defer></script>
+  </body>
 </html>
-=======
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flavournous Dance — Music & Video</title>
-  <link rel="stylesheet" href="site/styles.css" />
-</head>
-<body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">FD</div>
-        <div class="titles">
-          <h1>Flavournous Voice </h1>
-          <p class="muted">Play online • Download • Dance</p>
-        </div>
-      </div>
-      <nav>
-        <a href="site/admin-dashboard.html" class="admin-link">Admin Dashboard</a>
-      </nav>
-    </header>
-
-    <main class="container" id="main">
-      <!-- injected by router -->
-    </main>
-
-    <div id="player" class="player hidden card"></div>
-
-    <footer class="footer">© Flavournous Dance</footer>
-  </div>
-
-<script src="site/app.js" defer></script>
-</body>
-</html>
->>>>>>> 8ddd30324b0764b0ea96f5a39a3dd53f48394074

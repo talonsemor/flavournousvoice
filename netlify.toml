@@ -1,9 +1,5 @@
-[build]
-  base = "."
-  publish = "site"
-  command = "echo 'No build needed for static site'"
-  functions = "netlify/functions"
+## Netlify configuration removed
+## This project does not use Netlify. The original Netlify config
+## has been disabled to avoid accidental usage. If you need to
+## re-enable Netlify hosting, restore a proper `netlify.toml`.
 
-[dev]
-  command = "npx netlify-cli dev"
-  port = 8888
