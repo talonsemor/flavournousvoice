@@ -4,6 +4,18 @@
   // If no backend is available, return a sample item so homepage shows media.
   const sampleUrl =
     "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765013350/wyytxkdr8oqjgyasemou.mp3";
+  const secondUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765013345/is6l4ugksztca8fozqkw.mp3";
+  const thirdUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516403/znmp9n0w6ens0hs7ebvb.mp3";
+  const fourthUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516411/mb9aiywzvpvgslvr15qx.mp3";
+  const fifthUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516412/b28ovmcylfytxcvhqb3j.mp3";
+  const sixthUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516417/wu567ivlnjxer04szh4w.mp3";
+  const seventhUrl =
+    "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516532/ro9l5kz56yibwuhagmwo.mp3";
   const sample = [
     {
       title: "Sample Track",
@@ -12,7 +24,81 @@
       image: "",
       qualities: [{ label: "Original", url: sampleUrl }],
     },
+    {
+      title: "nakupenda",
+      artist: "Flavournous",
+      url: secondUrl,
+      image: "",
+      qualities: [{ label: "Original", url: secondUrl }],
+    },
+    {
+      title: "Extra Track 1",
+      artist: "Flavournous",
+      url: thirdUrl,
+      image: "",
+      qualities: [{ label: "Original", url: thirdUrl }],
+    },
+    {
+      title: "Extra Track 2",
+      artist: "Flavournous",
+      url: fourthUrl,
+      image: "",
+      qualities: [{ label: "Original", url: fourthUrl }],
+    },
+    {
+      title: "Extra Track 3",
+      artist: "Flavournous",
+      url: fifthUrl,
+      image: "",
+      qualities: [{ label: "Original", url: fifthUrl }],
+    },
+    {
+      title: "Extra Track 4",
+      artist: "Flavournous",
+      url: sixthUrl,
+      image: "",
+      qualities: [{ label: "Original", url: sixthUrl }],
+    },
+    {
+      title: "Extra Track 5",
+      artist: "Flavournous",
+      url: seventhUrl,
+      image: "",
+      qualities: [{ label: "Original", url: seventhUrl }],
+    },
   ];
+  // Helper: derive a readable title from a URL
+  function deriveTitleFromUrl(u) {
+    try {
+      const p = (u + "").split("/").pop().split("?")[0].split("#")[0];
+      const name = p.replace(/\.[^.]+$/, "");
+      // replace separators with spaces and capitalize words
+      return name
+        .replace(/[-_]+/g, " ")
+        .replace(/%20/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    } catch (e) {
+      return "Track";
+    }
+  }
+
+  function getExt(u) {
+    try {
+      const m = (u + "").split("?")[0].split("#")[0];
+      const ext = m.split('.').pop();
+      return ext || 'mp3';
+    } catch (e) {
+      return 'mp3';
+    }
+  }
+
+  // Ensure sample items have readable titles and qualities
+  sample.forEach((s, i) => {
+    if (!s.title || s.title.match(/^Extra Track/i)) s.title = deriveTitleFromUrl(s.url) || `Track ${i + 1}`;
+    if (!s.qualities || !s.qualities.length) s.qualities = [{ label: 'Original', url: s.url }];
+  });
   // Try fetching from a real media endpoint if configured
   try {
     const workerBase =
@@ -55,8 +141,10 @@ async function loadMedia() {
     const btn = document.createElement("button");
     btn.className = "btn small";
     btn.textContent = "Open album";
-    btn.onclick = () =>
-      (location.hash = "#/album/" + encodeURIComponent(artist));
+      btn.onclick = () => {
+        location.hash = "#/album/" + encodeURIComponent(artist);
+        if (typeof navigate === "function") navigate();
+      };
     aDiv.appendChild(img);
     aDiv.appendChild(title);
     aDiv.appendChild(cnt);
@@ -102,6 +190,36 @@ async function loadMedia() {
 // Call loadMedia on page ready so homepage shows uploaded items (or sample)
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof loadMedia === "function") loadMedia();
+
+  // Theme toggle: persistent, non-invasive
+  function applyTheme(theme) {
+    if (theme === "light") document.body.classList.add("light");
+    else document.body.classList.remove("light");
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (e) {
+      /* ignore storage errors */
+    }
+  }
+
+  // Apply saved theme (default dark)
+  const saved = (function () {
+    try {
+      return localStorage.getItem("theme");
+    } catch (e) {
+      return null;
+    }
+  })();
+  applyTheme(saved === "light" ? "light" : "dark");
+
+  // Wire up topbar toggle button if present
+  const tbtn = document.getElementById("themeToggle");
+  if (tbtn) {
+    tbtn.addEventListener("click", () => {
+      const isLight = document.body.classList.contains("light");
+      applyTheme(isLight ? "dark" : "light");
+    });
+  }
 });
 async function loadAlbum(artist) {
   const data = await fetchMedia();
@@ -167,12 +285,21 @@ function openPlayer(item) {
   artist.className = "track-artist";
   artist.textContent = item.artist || "";
   const selector = document.createElement("select");
-  selector.className = "selector"(item.qualities || []).forEach((q) => {
+  selector.className = "selector";
+  (item.qualities || []).forEach((q) => {
     const opt = document.createElement("option");
     opt.value = q.url;
     opt.textContent = q.label || q.url;
     selector.appendChild(opt);
   });
+
+  // Fallback: if no qualities exist, provide the main item URL as an option
+  if (!selector.options.length && item.url) {
+    const opt = document.createElement('option');
+    opt.value = item.url;
+    opt.textContent = item.title || 'Track';
+    selector.appendChild(opt);
+  }
   const playBtn = document.createElement("button");
   playBtn.className = "btn small";
   playBtn.textContent = "Play";
