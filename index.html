@@ -10,25 +10,20 @@
     <div class="app">
       <header class="topbar">
         <div class="brand">
-          <div class="logo">FV</div>
+          <div class="logo">FD</div>
           <div class="titles">
             <h1>Flavournous Voice</h1>
             <p class="muted">Play online • Download • Dance</p>
           </div>
         </div>
         <nav>
-          <a href="site/admin-dashboard.html" class="admin-link"
-            >Admin Dashboard</a
-          >
-          <button id="themeToggle" class="btn small" style="margin-left: 12px">
-            Toggle Theme
-          </button>
+          <button id="themeToggle" class="btn secondary">Toggle Theme</button>
+          <a href="site/about.html" class="admin-link">About</a>
         </nav>
       </header>
 
       <main class="container" id="main">
-        <!-- Media grid -->
-        <div id="grid" class="grid"></div>
+        <!-- injected by router -->
       </main>
 
       <div id="player" class="player hidden card"></div>
@@ -36,10 +31,7 @@
       <footer class="footer">© Flavournous Dance</footer>
     </div>
 
-    <script>
-      // Ensure site scripts load relative to root
-      window.SITE_BASE = "site";
-    </script>
+    <script src="site/router.js" defer></script>
     <script src="site/app.js" defer></script>
   </body>
 </html>
