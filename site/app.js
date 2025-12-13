@@ -1,4 +1,30 @@
-﻿async function fetchMedia() {
+﻿// Helpers: derive a readable title from a URL and extract extension
+function deriveTitleFromUrl(u) {
+  try {
+    const p = (u + "").split("/").pop().split("?")[0].split("#")[0];
+    const name = p.replace(/\.[^.]+$/, "");
+    return name
+      .replace(/[-_]+/g, " ")
+      .replace(/%20/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  } catch (e) {
+    return "Track";
+  }
+}
+
+function getExt(u) {
+  try {
+    const m = (u + "").split("?")[0].split("#")[0];
+    const ext = m.split('.').pop();
+    return ext || 'mp3';
+  } catch (e) {
+    return 'mp3';
+  }
+}
+
+async function fetchMedia() {
   // Cloudflare Worker endpoint for media listing (implement if needed)
   // const res = await fetch('https://YOUR_WORKER_URL/media')
   // If no backend is available, return a sample item so homepage shows media.
@@ -18,21 +44,22 @@
     "https://res.cloudinary.com/dsse7gz6b/video/upload/v1765516532/ro9l5kz56yibwuhagmwo.mp3";
   const sample = [
     {
-      title: "Sample Track",
+      title: "Ramcy voice remix",
       artist: "Flavournous",
       url: sampleUrl,
       image: "",
       qualities: [{ label: "Original", url: sampleUrl }],
     },
     {
-      title: "nakupenda",
+      title: "Nakupenda Ramcy Voice",
       artist: "Flavournous",
       url: secondUrl,
       image: "",
       qualities: [{ label: "Original", url: secondUrl }],
     },
+
     {
-      title: "Extra Track 1",
+      title: "Jobizer ft flavournous voice",
       artist: "Flavournous",
       url: thirdUrl,
       image: "",
@@ -46,7 +73,7 @@
       qualities: [{ label: "Original", url: fourthUrl }],
     },
     {
-      title: "Extra Track 3",
+      title: "Jobizer ft flavournous voice",
       artist: "Flavournous",
       url: fifthUrl,
       image: "",
@@ -172,11 +199,12 @@ async function loadMedia() {
     openBtn.onclick = () => openPlayer(item);
     const dl = document.createElement("a");
     dl.className = "btn small";
-    dl.href =
-      (item.qualities && item.qualities[0] && item.qualities[0].url) ||
-      item.url ||
-      "#";
-    dl.download = "";
+    const firstUrl = (item.qualities && item.qualities[0] && item.qualities[0].url) || item.url || "";
+    dl.href = firstUrl || "#";
+    // use item.title for filename when available, otherwise derive from URL
+    const filename = (item.title && item.title.length) ? item.title : deriveTitleFromUrl(firstUrl);
+    const ext = getExt(firstUrl);
+    dl.download = filename + (filename.toLowerCase().endsWith('.' + ext) ? '' : '.' + ext);
     dl.textContent = "Quick Download";
     controls.appendChild(openBtn);
     controls.appendChild(dl);
@@ -245,11 +273,11 @@ async function loadAlbum(artist) {
       openBtn.onclick = () => openPlayer(item);
       const dl = document.createElement("a");
       dl.className = "btn small";
-      dl.href =
-        (item.qualities && item.qualities[0] && item.qualities[0].url) ||
-        item.url ||
-        "#";
-      dl.download = "";
+      const albumFirst = (item.qualities && item.qualities[0] && item.qualities[0].url) || item.url || "";
+      dl.href = albumFirst || "#";
+      const albumFilename = (item.title && item.title.length) ? item.title : deriveTitleFromUrl(albumFirst);
+      const albumExt = getExt(albumFirst);
+      dl.download = albumFilename + (albumFilename.toLowerCase().endsWith('.' + albumExt) ? '' : '.' + albumExt);
       dl.textContent = "Quick Download";
       controls.appendChild(openBtn);
       controls.appendChild(dl);
@@ -335,11 +363,18 @@ function openPlayer(item) {
   };
   const downloadBtn = document.createElement("a");
   downloadBtn.className = "btn small";
-  downloadBtn.href = selector.value || item.url || "#";
-  downloadBtn.download = "";
+  const initialSrc = selector.value || item.url || "";
+  downloadBtn.href = initialSrc || "#";
+  const initialName = (item.title && item.title.length) ? item.title : deriveTitleFromUrl(initialSrc);
+  const initialExt = getExt(initialSrc);
+  downloadBtn.download = initialName + (initialName.toLowerCase().endsWith('.' + initialExt) ? '' : '.' + initialExt);
   downloadBtn.textContent = "Download";
   selector.onchange = () => {
-    downloadBtn.href = selector.value;
+    const src = selector.value || item.url || "";
+    downloadBtn.href = src || "#";
+    const name = (item.title && item.title.length) ? item.title : deriveTitleFromUrl(src);
+    const ext = getExt(src);
+    downloadBtn.download = name + (name.toLowerCase().endsWith('.' + ext) ? '' : '.' + ext);
   };
   const closeBtn = document.createElement("button");
   closeBtn.className = "btn small";
